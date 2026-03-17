@@ -1,0 +1,269 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f6fb;
+    /* same as admin content background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Form container */
+form {
+    background-color: #ffffff;
+    padding: 30px 35px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    width: 360px;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Heading */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1e3a8a;
+    /* deep blue heading */
+}
+
+/* Inputs */
+input,
+select {
+    width: 100%;
+    padding: 11px 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #2563eb;
+    /* bright blue focus */
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(90deg, #1e3a8a, #2563eb);
+    /* blue gradient */
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+/* simple hover, no transition */
+
+/* ------------ auth navbar ------------ */
+.auth-navbar {
+    background: linear-gradient(90deg, #1e3a8a, #2563eb);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+.auth-navbar .logo {
+    font-weight: bold;
+    font-size: 18px;
+}
+.auth-navbar .nav-right {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.auth-navbar .dropdown {
+    position: relative;
+}
+.auth-navbar .dropbtn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 6px 8px;
+}
+.auth-navbar .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #ffffff;
+    color: #333;
+    flex-direction: column;
+    min-width: 150px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    z-index: 1001;
+}
+.auth-navbar .dropdown-content a {
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+.auth-navbar .dropdown-content a:hover {
+    background: #f4f6fb;
+}
+.auth-navbar .dropdown:hover .dropdown-content {
+    display: flex;
+}
+
+/* mobile toggle for auth navbar */
+.auth-navbar .hamburger {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.mobile-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: #1e40af;
+    color: white;
+    flex-direction: column;
+    width: 200px;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 1001;
+}
+
+.mobile-menu a {
+    padding: 8px 10px;
+    color: white;
+    text-decoration: none;
+}
+
+.mobile-menu a:hover {
+    background: #2563eb;
+}
+
+.mobile-menu.show {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .auth-navbar .dropdown {
+        display: none;
+    }
+    .auth-navbar .hamburger {
+        display: block;
+        color: white;
+    }
+}
+
+/* adjust form position with fixed navbar */
+form {
+    
+    width: 90%;
+    max-width: 400px;
+}
+
+@media (max-width: 480px) {
+    form {
+        margin: 40px auto 20px; /* more space for mobile hamburger */
+        padding: 20px;
+    }
+}
+
+/* ------------- filter bar tweaks -------------- */
+.filter-bar select,
+.filter-bar input,
+.filter-bar button,
+.filter-bar .reset-btn {
+    font-size: 13px;
+    padding: 8px 10px;
+}
+
+@media (max-width: 768px) {
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .filter-bar select,
+    .filter-bar input,
+    .filter-bar button,
+    .filter-bar .reset-btn {
+        width: 100%;
+    }
+}
+
+/* Links */
+p {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Flash messages */
+ul {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+ul li {
+    background-color: #fdecea;
+    color: #c62828;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.success {
+    background-color: #e0f2fe;
+    color: #1e3a8a;
+}
