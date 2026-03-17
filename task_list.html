@@ -1,0 +1,60 @@
+{% extends "staff/base.html" %}
+{% block content %}
+<h2>{{ title }}</h2>
+
+<!-- ✅ Filter Bar -->
+<form method="get" action="{{ url_for('staff.' + category + '_tasks') }}" class="filter-bar">
+  
+  {% if category != 'today' %}
+  <!-- Status -->
+  <select name="status">
+    <option value="">-- Filter by Status --</option>
+    <option value="completed" {% if category=='completed' %}selected{% endif %}>Completed</option>
+    <option value="pending" {% if category=='pending' %}selected{% endif %}>Pending</option>
+    <option value="overdue" {% if category=='overdue' %}selected{% endif %}>Overdue</option>
+  </select>
+
+  <!-- Date Filters -->
+  <input type="date" name="from_date" value="{{ request.args.get('from_date','') }}">
+  <input type="date" name="to_date" value="{{ request.args.get('to_date','') }}">
+  {% endif %}
+
+  <button type="submit">Apply Filter</button>
+  <a href="{{ url_for('staff.' + category + '_tasks') }}" class="reset-btn">Reset</a>
+</form>
+
+<div class="task-grid">
+    {% for task in tasks %}
+    <div class="task-card
+        {% if task.status == 'completed' %}completed-task{% elif task.status == 'pending' %}pending-task{% elif task.status == 'overdue' %}overdue-task{% endif %}"
+        onclick="location.href='/staff/task/{{ task.id }}'">
+
+        <h4>{{ task.title }}</h4>
+        <p title="{{ task.description }}">
+            <span class="label">📝 Description:</span>
+            {{ task.description[:50] }}{% if task.description|length > 10 %}...{% endif %}
+        </p>
+        <p><span class="label">📅 Due:</span> {{ task.deadline }}</p>
+        <p><span class="label">⚡ Status:</span>
+            <span class="status-badge {{ task.status }}">{{ task.status|capitalize }}</span>
+        </p>
+        <p><span class="label">🗓️ Created At:</span> {{ task.created_at }}</p>
+        <p><span class="label">✍️ Created By:</span> {{ task.created_by if task.created_by else 'Admin' }}</p>
+    </div>
+    {% else %}
+    <p>No tasks found 🎉</p>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    {% if page > 1 %}
+    <a href="?page={{ page - 1 }}" class="page-btn">← Prev</a>
+    {% endif %}
+    <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+    <a href="?page={{ page + 1 }}" class="page-btn">Next →</a>
+    {% endif %}
+</div>
+
+<a href="{{ url_for('staff.dashboard') }}" class="back-btn"> ←</a>
+{% endblock %}

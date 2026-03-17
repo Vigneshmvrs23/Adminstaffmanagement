@@ -1,6 +1,6 @@
-{% extends "admin/base.html" %}
+{% extends "staff/base.html" %}
 {% block content %}
-<h2>👤 Admin Profile</h2>
+<h2>👤 Staff Profile</h2>
 
 <div class="admin-profile-container left-align">
     <div class="admin-profile-header">
@@ -23,7 +23,7 @@
             </div>
 
             <div class="admin-profile-actions">
-                <a href="{{ url_for('admin.edit_profile') }}" class="admin-edit-btn">Edit Profile</a>
+                <a href="{{ url_for('staff.edit_profile') }}" class="admin-edit-btn">Edit Profile</a>
             </div>
         </div>
     </div>

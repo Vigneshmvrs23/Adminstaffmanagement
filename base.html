@@ -3,15 +3,17 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Panel</title>
+    <title>Staff Panel</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    <!-- ✅ Load Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
     <!-- Navbar -->
     <div class="navbar">
         <div class="nav-left">
-            <div class="logo">⚡ Admin Panel</div>
+            <div class="logo">⚡ Staff Panel</div>
         </div>
 
         <div class="nav-right">
@@ -22,18 +24,13 @@
         </div>
     </div>
 
-    <!-- Mobile menu (anchored to right end) -->
+    <!-- Centered dropdown / mobile menu -->
     <nav id="mobile-menu" class="mobile-menu" aria-hidden="true">
-        <a href="{{ url_for('admin.dashboard') }}">🏠 Dashboard</a>
-        <a href="{{ url_for('admin.task_dashboard') }}">📋 Task Dashboard</a>
-        <a href="{{ url_for('admin.today_tasks_page') }}">📅 Today’s Tasks</a> <!-- ✅ Added -->
-        <a href="{{ url_for('admin.manage_staff') }}">👥 Manage Staff</a>
-        <a href="{{ url_for('admin.create_staff') }}">➕ Create Staff</a>
-        <a href="{{ url_for('admin.create_task') }}">📝 Create Task</a>
-        <a href="{{ url_for('admin.manage_tasks') }}">📂 Manage Tasks</a>
-        <a href="{{ url_for('admin.all_tasks') }}">📊 All Staff Tasks</a>
-        <a href="{{ url_for('admin.staff_performance') }}">⭐ Staff Performance</a>
-        <a href="{{ url_for('admin.profile') }}">👤 Profile</a>
+        <a href="{{ url_for('staff.dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('staff.my_tasks') }}">📋 My Tasks</a>
+        <a href="{{ url_for('staff.create_task') }}">📝 Create Task</a>
+        <a href="{{ url_for('staff.task_graph') }}">📊 Task Graph</a>
+        <a href="{{ url_for('staff.profile') }}">👤 Profile</a>
         <a href="{{ url_for('logout') }}" class="logout-btn-mobile">🚪 Logout</a>
     </nav>
 
@@ -41,24 +38,23 @@
     <div class="layout">
         <!-- Sidebar -->
         <div class="sidebar">
+            <!-- ✅ Profile Picture + Name instead of "Navigation" -->
             <div class="profile-pic">
                 {% if user and user.profile_pic %}
                 <img src="{{ user.profile_pic }}" alt="{{ user.name }}">
                 {% else %}
                 <div class="admin-profile-avatar">{{ user.name[0] }}</div>
                 {% endif %}
+                <!-- <h3>{{ user.name if user else session['name'] }}</h3> -->
             </div>
+
+            <!-- ✅ Navigation links remain unchanged -->
             <div class="nav-links">
-                <a href="{{ url_for('admin.dashboard') }}">🏠 Dashboard</a>
-                <a href="{{ url_for('admin.task_dashboard') }}">📋 Task Dashboard</a>
-                <a href="{{ url_for('admin.today_tasks_page') }}">📅 Today’s Tasks</a> <!-- ✅ Added -->
-                <a href="{{ url_for('admin.manage_staff') }}">👥 Manage Staff</a>
-                <a href="{{ url_for('admin.create_staff') }}">➕ Create Staff</a>
-                <a href="{{ url_for('admin.create_task') }}">📝 Create Task</a>
-                <a href="{{ url_for('admin.manage_tasks') }}">📂 Manage Tasks</a>
-                <a href="{{ url_for('admin.all_tasks') }}">📊 All Staff Tasks</a>
-                <a href="{{ url_for('admin.staff_performance') }}">⭐ Staff Performance</a>
-                <a href="{{ url_for('admin.profile') }}">👤 Profile</a>
+                <a href="{{ url_for('staff.dashboard') }}">🏠 Dashboard</a>
+                <a href="{{ url_for('staff.my_tasks') }}">📋 My Tasks</a>
+                <a href="{{ url_for('staff.create_task') }}">📝 Create Task</a>
+                <a href="{{ url_for('staff.task_graph') }}">📊 Task Graph</a>
+                <a href="{{ url_for('staff.profile') }}">👤 Profile</a>
             </div>
         </div>
 
@@ -76,9 +72,6 @@
                 var isShown = m.classList.toggle('show');
                 btn.setAttribute('aria-expanded', isShown);
                 m.setAttribute('aria-hidden', !isShown);
-
-                // ✅ Change icon
-                btn.textContent = isShown ? "✖" : "☰";
             }
         }
 
@@ -91,22 +84,19 @@
                         m.classList.remove('show');
                         btn.setAttribute('aria-expanded', 'false');
                         m.setAttribute('aria-hidden', 'true');
-                        btn.textContent = "☰"; // reset icon
                     }
                 });
             });
 
+            // close dropdown when clicking outside
             document.addEventListener('click', function (e) {
                 var mobile = document.getElementById('mobile-menu');
                 var insideMobile = e.target.closest && (e.target.closest('#mobile-menu') || e.target.closest('#hamburgerBtn'));
                 if (!insideMobile && mobile && mobile.classList.contains('show')) {
                     mobile.classList.remove('show');
                     var btn = document.getElementById('hamburgerBtn');
-                    if (btn) {
-                        btn.setAttribute('aria-expanded', 'false');
-                        mobile.setAttribute('aria-hidden', 'true');
-                        btn.textContent = "☰"; // reset icon
-                    }
+                    if (btn) btn.setAttribute('aria-expanded', 'false');
+                    mobile.setAttribute('aria-hidden', 'true');
                 }
             });
         });
