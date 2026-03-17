@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="nav-left">
+            <div class="logo">⚡ Admin Panel</div>
+        </div>
+
+        <div class="nav-right">
+            <span class="welcome">Welcome, {{ user.name if user else session['name'] }}</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            <button id="hamburgerBtn" class="hamburger" aria-expanded="false" aria-controls="mobile-menu"
+                onclick="toggleMobile()">☰</button>
+        </div>
+    </div>
+
+    <!-- Mobile menu (anchored to right end) -->
+    <nav id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <a href="{{ url_for('admin.dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('admin.task_dashboard') }}">📋 Task Dashboard</a>
+        <a href="{{ url_for('admin.today_tasks_page') }}">📅 Today’s Tasks</a> <!-- ✅ Added -->
+        <a href="{{ url_for('admin.manage_staff') }}">👥 Manage Staff</a>
+        <a href="{{ url_for('admin.create_staff') }}">➕ Create Staff</a>
+        <a href="{{ url_for('admin.create_task') }}">📝 Create Task</a>
+        <a href="{{ url_for('admin.manage_tasks') }}">📂 Manage Tasks</a>
+        <a href="{{ url_for('admin.all_tasks') }}">📊 All Staff Tasks</a>
+        <a href="{{ url_for('admin.staff_performance') }}">⭐ Staff Performance</a>
+        <a href="{{ url_for('admin.profile') }}">👤 Profile</a>
+        <a href="{{ url_for('logout') }}" class="logout-btn-mobile">🚪 Logout</a>
+    </nav>
+
+    <!-- Layout -->
+    <div class="layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="profile-pic">
+                {% if user and user.profile_pic %}
+                <img src="{{ user.profile_pic }}" alt="{{ user.name }}">
+                {% else %}
+                <div class="admin-profile-avatar">{{ user.name[0] }}</div>
+                {% endif %}
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('admin.dashboard') }}">🏠 Dashboard</a>
+                <a href="{{ url_for('admin.task_dashboard') }}">📋 Task Dashboard</a>
+                <a href="{{ url_for('admin.today_tasks_page') }}">📅 Today’s Tasks</a> <!-- ✅ Added -->
+                <a href="{{ url_for('admin.manage_staff') }}">👥 Manage Staff</a>
+                <a href="{{ url_for('admin.create_staff') }}">➕ Create Staff</a>
+                <a href="{{ url_for('admin.create_task') }}">📝 Create Task</a>
+                <a href="{{ url_for('admin.manage_tasks') }}">📂 Manage Tasks</a>
+                <a href="{{ url_for('admin.all_tasks') }}">📊 All Staff Tasks</a>
+                <a href="{{ url_for('admin.staff_performance') }}">⭐ Staff Performance</a>
+                <a href="{{ url_for('admin.profile') }}">👤 Profile</a>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <script>
+        function toggleMobile() {
+            var m = document.getElementById('mobile-menu');
+            var btn = document.getElementById('hamburgerBtn');
+            if (m) {
+                var isShown = m.classList.toggle('show');
+                btn.setAttribute('aria-expanded', isShown);
+                m.setAttribute('aria-hidden', !isShown);
+
+                // ✅ Change icon
+                btn.textContent = isShown ? "✖" : "☰";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('#mobile-menu a').forEach(function (el) {
+                el.addEventListener('click', function () {
+                    var m = document.getElementById('mobile-menu');
+                    var btn = document.getElementById('hamburgerBtn');
+                    if (m && m.classList.contains('show')) {
+                        m.classList.remove('show');
+                        btn.setAttribute('aria-expanded', 'false');
+                        m.setAttribute('aria-hidden', 'true');
+                        btn.textContent = "☰"; // reset icon
+                    }
+                });
+            });
+
+            document.addEventListener('click', function (e) {
+                var mobile = document.getElementById('mobile-menu');
+                var insideMobile = e.target.closest && (e.target.closest('#mobile-menu') || e.target.closest('#hamburgerBtn'));
+                if (!insideMobile && mobile && mobile.classList.contains('show')) {
+                    mobile.classList.remove('show');
+                    var btn = document.getElementById('hamburgerBtn');
+                    if (btn) {
+                        btn.setAttribute('aria-expanded', 'false');
+                        mobile.setAttribute('aria-hidden', 'true');
+                        btn.textContent = "☰"; // reset icon
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

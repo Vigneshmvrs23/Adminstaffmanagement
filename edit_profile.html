@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<h2>✏️ Edit Profile</h2>
+
+<form method="POST" enctype="multipart/form-data" class="edit-form">
+    <label>Name</label>
+    <input type="text" name="name" value="{{ user.name }}" required>
+
+    <label>Email</label>
+    <input type="email" name="email" value="{{ user.email }}" required>
+
+    <label>Profile Picture</label>
+    {% if user.profile_pic %}
+    <div class="current-pic">
+        <img src="{{ user.profile_pic }}" alt="Profile Picture" class="profile-preview">
+    </div>
+    {% endif %}
+    <input type="file" name="profile_pic" class="file-input">
+
+    <button type="submit" class="save-btn">💾 Save Changes</button>
+</form>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<h2>📋 Task Dashboard</h2>
+<div class="dashboard-grid">
+
+  <!-- Today's Tasks -->
+  <div class="task-box">
+    <h3>Today’s Tasks</h3>
+    {% if today_tasks %}
+      {% for task in today_tasks[:2] %}
+        <div class="task-card" onclick="location.href='/admin/task/{{ task.id }}'">
+          <h4>{{ task.title }}</h4>
+          <p title="{{ task.staff_name }}">
+            {{ task.staff_name[:10] }}{% if task.staff_name|length > 10 %}...{% endif %}
+          </p>
+        </div>
+      {% endfor %}
+      {% if today_tasks|length > 2 %}
+        <a href="/admin/tasks/today" class="read-more">View More →</a>
+      {% endif %}
+    {% else %}
+      <p class="task-box-p" class="no-tasks">📌 No tasks assigned today</p>
+    {% endif %}
+  </div>
+
+  <!-- Completed Tasks -->
+  <div class="task-box">
+    <h3>Completed Tasks</h3>
+    {% if completed_tasks %}
+      {% for task in completed_tasks[:2] %}
+        <div class="task-card" onclick="location.href='/admin/task/{{ task.id }}'">
+          <h4>{{ task.title }}</h4>
+          <p title="{{ task.staff_name }}">
+            {{ task.staff_name[:10] }}{% if task.staff_name|length > 10 %}...{% endif %}
+          </p>
+        </div>
+      {% endfor %}
+      {% if completed_tasks|length > 2 %}
+        <a href="/admin/tasks/completed" class="read-more">View More →</a>
+      {% endif %}
+    {% else %}
+      <p class="task-box-p">✅ No completed tasks yet</p>
+    {% endif %}
+  </div>
+
+  <!-- Pending Tasks -->
+  <div class="task-box">
+    <h3>Pending Tasks</h3>
+    {% if pending_tasks %}
+      {% for task in pending_tasks[:2] %}
+        <div class="task-card" onclick="location.href='/admin/task/{{ task.id }}'">
+          <h4>{{ task.title }}</h4>
+          <p title="{{ task.staff_name }}">
+            {{ task.staff_name[:10] }}{% if task.staff_name|length > 10 %}...{% endif %}
+          </p>
+        </div>
+      {% endfor %}
+      {% if pending_tasks|length > 2 %}
+        <a href="/admin/tasks/pending" class="read-more">View More →</a>
+      {% endif %}
+    {% else %}
+      <p class="task-box-p">⏳ No pending tasks</p>
+    {% endif %}
+  </div>
+
+  <!-- Overdue Tasks -->
+  <div class="task-box">
+    <h3>Overdue Tasks</h3>
+    {% if overdue_tasks %}
+      {% for task in overdue_tasks[:2] %}
+        <div class="task-card overdue" onclick="location.href='/admin/task/{{ task.id }}'">
+          <h4>{{ task.title }}</h4>
+          <p title="{{ task.staff_name }}">
+            {{ task.staff_name[:10] }}{% if task.staff_name|length > 10 %}...{% endif %}
+          </p>
+        </div>
+      {% endfor %}
+      {% if overdue_tasks|length > 2 %}
+        <a href="/admin/tasks/overdue" class="read-more">View More →</a>
+      {% endif %}
+    {% else %}
+      <p class="task-box-p">🚀 No overdue tasks 🎉</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

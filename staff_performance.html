@@ -1,0 +1,40 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<h2>⭐ Staff Performance ({{ month_name }} {{ year }})</h2>
+
+<div class="performance-list">
+  {% for staff in staff_stats %}
+  <div class="performance-card">
+    <h4>{{ staff.name }}</h4>
+    <p>Total Tasks: {{ staff.total_tasks }}</p>
+    <p>Completed: {{ staff.completed_tasks }}</p>
+    <p>Stars:
+      {% for i in range(staff.stars) %}
+      ⭐
+      {% endfor %}
+    </p>
+  </div>
+  {% endfor %}
+</div>
+
+{% if best_performers %}
+<div class="best-performer">
+  <h3>🏆 Best Performer of the Month</h3>
+  <div class="podium">
+    {% for bp in best_performers %}
+    <div class="podium-slot">
+      <span class="podium-rank">#{{ loop.index }}</span>
+      <span class="podium-name">{{ bp.name }}</span>
+      <span class="podium-stars">{{ bp.stars }} ⭐</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="best-performer empty">
+  <h3>🏆 Best Performer of the Month</h3>
+  <p class="no-best">No best performer this month yet 🎉</p>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<h2>{{ category|capitalize }} Tasks</h2>
+
+<!-- ✅ Filter Bar -->
+<form method="get" action="{{ url_for('admin.tasks_by_category', category=category) }}" class="filter-bar">
+  
+  <!-- Status -->
+  <select name="status">
+    <option value="">-- Filter by Status --</option>
+    <option value="today" {% if request.args.get('status') == 'today' or category=='today' %}selected{% endif %}>Today</option>
+    <option value="completed" {% if request.args.get('status') == 'completed' or category=='completed' %}selected{% endif %}>Completed</option>
+    <option value="pending" {% if request.args.get('status') == 'pending' or category=='pending' %}selected{% endif %}>Pending</option>
+    <option value="overdue" {% if request.args.get('status') == 'overdue' or category=='overdue' %}selected{% endif %}>Overdue</option>
+  </select>
+
+  <!-- Staff Dropdown -->
+  <select name="staff">
+    <option value="">-- Filter by Staff --</option>
+    {% for s in active_staff %}
+    <option value="{{ s.name }}" {% if request.args.get('staff') == s.name %}selected{% endif %}>{{ s.name }}</option>
+    {% endfor %}
+  </select>
+
+  <!-- ✅ Only show date filters if not "today" -->
+  {% if category != 'today' and request.args.get('status') != 'today' %}
+  <input type="date" name="from_date" value="{{ request.args.get('from_date','') }}">
+  <input type="date" name="to_date" value="{{ request.args.get('to_date','') }}">
+  {% endif %}
+
+  <button type="submit">Apply Filter</button>
+  <a href="{{ url_for('admin.tasks_by_category', category=category) }}" class="reset-btn">Reset</a>
+</form>
+
+<div class="task-grid">
+    {% for task in tasks %}
+    <div class="task-card
+        {% if task.status == 'completed' %}completed-task{% elif task.status == 'pending' %}pending-task{% elif task.status == 'overdue' %}overdue-task{% endif %}"
+        onclick="location.href='/admin/task/{{ task.id }}'">
+
+        <h4>{{ task.title }}</h4>
+        <p><span class="label">👤 Assigned To:</span> {{ task.staff_name }}</p>
+        <p title="{{ task.description }}">
+            {{ task.description[:50] }}{% if task.description|length > 10 %}...{% endif %}
+        </p>
+        <p><span class="label">📅 Due:</span> {{ task.deadline }}</p>
+        <p><span class="label">⚡ Status:</span>
+            <span class="status-badge {{ task.status }}">{{ task.status|capitalize }}</span>
+        </p>
+        <p><span class="label">🗓️ Created At:</span> {{ task.created_at }}</p>
+        <p><span class="label">✍️ Created By:</span> {{ task.creator_name if task.creator_name else 'Admin' }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    {% if page > 1 %}
+    <a href="?page={{ page - 1 }}" class="page-btn">← Prev</a>
+    {% endif %}
+    <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+    <a href="?page={{ page + 1 }}" class="page-btn">Next →</a>
+    {% endif %}
+</div>
+
+<a href="{{ url_for('admin.task_dashboard') }}" class="back-btn"> ← </a>
+{% endblock %}

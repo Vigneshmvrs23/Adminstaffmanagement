@@ -1,0 +1,45 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<section class="dashboard">
+    <h2>📊 Dashboard</h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="icon">👥</div>
+            <div class="details">
+                <h3>Total Staff</h3>
+                <p>{{ staff_count }}</p>
+                <small>Active: {{ active_staff }} / Inactive: {{ inactive_staff }}</small>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="icon">📝</div>
+            <div class="details">
+                <h3>Total Tasks</h3>
+                <p>{{ task_count }}</p>
+                <small>Pending: {{ pending_tasks }} / Completed: {{ completed_tasks }}</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if best_performers %}
+  <div class="best-performer">
+    <h3>🏆 Best Performer of the Month</h3>
+    <div class="podium">
+      {% for bp in best_performers %}
+        <div class="podium-slot">
+          <span class="podium-rank">#{{ loop.index }}</span>
+          <span class="podium-name">{{ bp.name }}</span>
+          <span class="podium-stars">{{ bp.stars }} ⭐</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% else %}
+  <div class="best-performer empty">
+    <h3>🏆 Best Performer of the Month</h3>
+    <p class="no-best">No best performer this month yet 🎉</p>
+  </div>
+{% endif %}
+
+{% endblock %}
